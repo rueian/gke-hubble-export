@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: gke-hubble-export
+  labels:
+    name: gke-hubble-export
+spec:
+  selector:
+    matchLabels:
+      name: gke-hubble-export
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 10
+  template:
+    metadata:
+      labels:
+        name: gke-hubble-export
+    spec:
+      hostNetwork: true
+      tolerations:
+        - operator: Exists
+        - key: components.gke.io/gke-managed-components
+          operator: Exists
+      containers:
+        - name: gke-hubble-export
+          image: docker.io/rueian/gke-hubble-export:latest
+          imagePullPolicy: Always
+          env:
+            - name: GKE_HUBBLE_EXPORT_ADDR
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+          volumeMounts:
+            - mountPath: /var/run/cilium
+              name: cilium-run
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - hostPath:
+            path: /var/run/cilium
+            type: DirectoryOrCreate
+          name: cilium-run

@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hubble-relay
+  labels:
+    k8s-app: hubble-relay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: hubble-relay
+  template:
+    metadata:
+      labels:
+        k8s-app: hubble-relay
+    spec:
+      containers:
+        - name: hubble-relay
+          image: quay.io/cilium/hubble-relay:v1.11.0
+          command:
+            - hubble-relay
+          args:
+            - serve
+          ports:
+            - name: grpc
+              containerPort: 4245
+          readinessProbe:
+            tcpSocket:
+              port: grpc
+          livenessProbe:
+            tcpSocket:
+              port: grpc
+          volumeMounts:
+            - name: hubble-sock-dir
+              mountPath: /var/run/cilium
+              readOnly: true
+            - name: config
+              mountPath: /etc/hubble-relay
+              readOnly: true
+      restartPolicy: Always
+      serviceAccount: hubble-relay
+      serviceAccountName: hubble-relay
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 0
+      volumes:
+        - name: config
+          configMap:
+            name: hubble-relay-config
+            items:
+              - key: config.yaml
+                path: config.yaml
+        - name: hubble-sock-dir
+          hostPath:
+            path: /var/run/cilium
+            type: Directory
