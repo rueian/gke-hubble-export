@@ -2,44 +2,47 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: hubble-ui
+  name: {{ include "hubble-gke-exporter.fullname" . }}-ui
   labels:
-    k8s-app: hubble-ui
+    app.kubernetes.io/name: hubble-ui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-app: hubble-ui
+      app.kubernetes.io/name: hubble-ui
   template:
     metadata:
       labels:
-        k8s-app: hubble-ui
+        app.kubernetes.io/name: hubble-ui
     spec:
       serviceAccount: hubble-ui
       serviceAccountName: hubble-ui
       containers:
         - name: frontend
-          image: quay.io/cilium/hubble-ui:v0.8.4
+          image: "{{ .Values.ui.frontend.image.repository }}:{{ .Values.ui.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.ui.frontend.image.imagePullPolicy }}
           ports:
             - name: http
               containerPort: 8080
         - name: backend
-          image: quay.io/cilium/hubble-ui-backend:v0.8.4
+          image: "{{ .Values.ui.backend.image.repository }}:{{ .Values.ui.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.ui.backend.image.imagePullPolicy }}
           env:
             - name: EVENTS_SERVER_PORT
               value: "8090"
             - name: FLOWS_API_ADDR
               value: "hubble-relay:80"
-
           ports:
             - name: grpc
               containerPort: 8090
         - name: proxy
-          image: docker.io/envoyproxy/envoy:v1.18.4
+          image: "{{ .Values.ui.proxy.image.repository }}:{{ .Values.ui.proxy.image.tag }}"
+          imagePullPolicy: {{ .Values.ui.proxy.image.imagePullPolicy }}
           ports:
             - name: http
               containerPort: 8081
-          command: [envoy]
+          command: 
+            - envoy
           args:
             - -c
             - /etc/envoy.yaml

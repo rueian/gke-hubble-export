@@ -1,9 +1,11 @@
+---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: gke-hubble-export
+  name: {{ include "hubble-gke-exporter.fullname" . }}
   labels:
-    name: gke-hubble-export
+    app.kubernetes.io/name: gke-hubble-export
+    {{- include "hubble-gke-exporter.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
@@ -15,17 +17,18 @@ spec:
   template:
     metadata:
       labels:
-        name: gke-hubble-export
+        app.kubernetes.io/name: gke-hubble-export
+        {{- include "hubble-gke-exporter.labels" . | nindent 4 }}
     spec:
-      hostNetwork: true
+      hostNetwork: {{ .Values.exporter.spec.hostNetwork }}
+      {{- with .Values.exporter.spec.tolerations }}
       tolerations:
-        - operator: Exists
-        - key: components.gke.io/gke-managed-components
-          operator: Exists
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: gke-hubble-export
-          image: docker.io/rueian/gke-hubble-export:latest
-          imagePullPolicy: Always
+          image: "{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
+          imagePullPolicy: {{ .Values.exporter.image.imagePullPolicy }}
           env:
             - name: GKE_HUBBLE_EXPORT_ADDR
               valueFrom:

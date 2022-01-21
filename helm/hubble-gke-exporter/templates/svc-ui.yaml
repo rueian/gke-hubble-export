@@ -1,0 +1,15 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "hubble-gke-exporter.fullname" . }}-ui
+  labels:
+    app.kubernetes.io/name: hubble-ui
+spec:
+  type: {{ .Values.service.ui.type }}
+  selector:
+    app.kubernetes.io/name: hubble-ui
+  ports:
+    - name: {{ .Values.service.ui.name }}
+      targetPort: 8081
+      port: {{ .Values.service.ui.port }}
