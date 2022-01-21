@@ -1,7 +1,6 @@
 package peer
 
 import (
-	"fmt"
 	"net"
 	"strings"
 
@@ -27,7 +26,6 @@ func (s *Service) Notify(req *peerpb.NotifyRequest, stream peerpb.Peer_NotifySer
 	}, func(msg proto.Message) {
 		v := msg.(*peerpb.ChangeNotification)
 		v.Tls = nil
-		fmt.Printf("Receive From Notify: %v\n", v.String())
 		if host, _, err := net.SplitHostPort(v.Address); err == nil {
 			v.Address = net.JoinHostPort(host, s.Port)
 		} else if strings.Contains(err.Error(), "missing port") {
