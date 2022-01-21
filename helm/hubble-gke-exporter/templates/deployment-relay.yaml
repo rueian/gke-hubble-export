@@ -2,22 +2,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hubble-relay
+  name: {{ include "hubble-gke-exporter.fullname" . }}-relay
   labels:
-    k8s-app: hubble-relay
+    app.kubernetes.io/name: hubble-relay
+    {{- include "hubble-gke-exporter.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.relay.spec.replicas }}
   selector:
     matchLabels:
-      k8s-app: hubble-relay
+      app.kubernetes.io/name: hubble-relay
+      {{- include "hubble-gke-exporter.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        k8s-app: hubble-relay
+        app.kubernetes.io/name: hubble-relay
+        {{- include "hubble-gke-exporter.labels" . | nindent 8 }}
     spec:
       containers:
         - name: hubble-relay
-          image: quay.io/cilium/hubble-relay:v1.11.0
+          image: "{{ .Values.relay.image.repository }}:v{{ .Chart.AppVersion }}"
           command:
             - hubble-relay
           args:
@@ -39,14 +42,14 @@ spec:
               mountPath: /etc/hubble-relay
               readOnly: true
       restartPolicy: Always
-      serviceAccount: hubble-relay
-      serviceAccountName: hubble-relay
+      serviceAccount: {{ include "hubble-gke-exporter.fullname" . }}-relay
+      serviceAccountName: {{ include "hubble-gke-exporter.fullname" . }}-relay
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 0
       volumes:
         - name: config
           configMap:
-            name: hubble-relay-config
+            name: {{ include "hubble-gke-exporter.fullname" . }}
             items:
               - key: config.yaml
                 path: config.yaml

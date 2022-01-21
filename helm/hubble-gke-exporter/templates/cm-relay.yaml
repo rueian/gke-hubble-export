@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: hubble-relay-config
+  name: {{ include "hubble-gke-exporter.fullname" . }}
 data:
   config.yaml: |
     peer-service: unix:///var/run/cilium/gke-hubble-export.sock

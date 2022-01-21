@@ -2,17 +2,17 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: hubble-relay
+  name: {{ include "hubble-gke-exporter.fullname" . }}-relay
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: hubble-ui
+  name: {{ include "hubble-gke-exporter.fullname" . }}-ui
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: hubble-ui
+  name: {{ include "hubble-gke-exporter.fullname" . }}-ui
 rules:
   - apiGroups:
       - networking.k8s.io
@@ -55,12 +55,12 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: hubble-ui
+  name: {{ include "hubble-gke-exporter.fullname" . }}-ui
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: hubble-ui
+  name: {{ include "hubble-gke-exporter.fullname" . }}-ui
 subjects:
   - kind: ServiceAccount
-    name: hubble-ui
-    namespace: default
+    name: {{ include "hubble-gke-exporter.fullname" . }}-ui
+    namespace: {{ .Release.Namespace }}

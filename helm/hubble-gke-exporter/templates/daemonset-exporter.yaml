@@ -9,7 +9,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      name: gke-hubble-export
+      app.kubernetes.io/name: gke-hubble-export
+      {{- include "hubble-gke-exporter.labels" . | nindent 6 }}
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,7 +19,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: gke-hubble-export
-        {{- include "hubble-gke-exporter.labels" . | nindent 4 }}
+        {{- include "hubble-gke-exporter.labels" . | nindent 8 }}
     spec:
       hostNetwork: {{ .Values.exporter.spec.hostNetwork }}
       {{- with .Values.exporter.spec.tolerations }}

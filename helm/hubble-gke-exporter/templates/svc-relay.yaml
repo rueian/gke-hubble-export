@@ -5,6 +5,7 @@ metadata:
   name: {{ include "hubble-gke-exporter.fullname" . }}
   labels:
     app.kubernetes.io/name: gke-hubble-export
+    {{- include "hubble-gke-exporter.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.relay.type }}
   selector:

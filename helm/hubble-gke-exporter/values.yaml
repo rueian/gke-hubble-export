@@ -30,6 +30,15 @@ ui:
       repository: docker.io/envoyproxy/envoy
       tag: v1.18.4
       imagePullPolicy: IfNotPresent
+  spec:    
+    replicas: 1
+
+relay:
+  image:
+    repository: quay.io/cilium/hubble-relay
+    imagePullPolicy: IfNotPresent
+  spec:    
+    replicas: 1
 
 service:
   relay:

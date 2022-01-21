@@ -46,7 +46,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "hubble-gke-exporter.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "hubble-gke-exporter.name" . }}
+app.kubernetes.io/part-of: {{ include "hubble-gke-exporter.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
