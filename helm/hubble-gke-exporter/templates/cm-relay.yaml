@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "hubble-gke-exporter.fullname" . }}
+data:
+  config.yaml: |
+    peer-service: unix:///var/run/cilium/gke-hubble-export.sock
+    listen-address: :4245
+    disable-client-tls: true
+    disable-server-tls: true
