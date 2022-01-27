@@ -9,7 +9,7 @@ metadata:
 spec:
   type: {{ .Values.service.relay.type }}
   selector:
-    app.kubernetes.io/name: gke-hubble-export
+    app.kubernetes.io/name: hubble-relay
   ports:
     - protocol: TCP
       port: {{ .Values.service.relay.port }}
