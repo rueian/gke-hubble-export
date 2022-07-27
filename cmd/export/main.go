@@ -21,7 +21,7 @@ import (
 )
 
 func main() {
-	target := env("HUBBLE_TARGET", defaults.HubbleTarget)
+	target := env("HUBBLE_TARGET", defaults.PeerTarget)
 	replace := env("GKE_HUBBLE_EXPORT_SOCK", "/var/run/cilium/gke-hubble-export.sock")
 	expAddr := env("GKE_HUBBLE_EXPORT_ADDR", "127.0.0.1")
 	expPort := env("GKE_HUBBLE_EXPORT_PORT", "42444")
