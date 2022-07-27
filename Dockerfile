@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-FROM golang:1.17 AS build
+FROM golang:1.18 AS build
 ENV GOCACHE="/gobuildcache"
 ENV GOPATH="/go"
 WORKDIR /src
