@@ -13,6 +13,8 @@ exporter:
       - operator: Exists
       - key: components.gke.io/gke-managed-components
         operator: Exists
+    podLabels: {}
+    podAnnotations: {}
 
 ui:
   frontend:
@@ -32,6 +34,8 @@ ui:
       imagePullPolicy: IfNotPresent
   spec:    
     replicas: 1
+    podLabels: {}
+    podAnnotations: {}
 
 relay:
   image:
@@ -39,6 +43,8 @@ relay:
     imagePullPolicy: IfNotPresent
   spec:    
     replicas: 1
+    podLabels: {}
+    podAnnotations: {}
 
 service:
   relay:
