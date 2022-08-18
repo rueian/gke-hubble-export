@@ -17,8 +17,15 @@ spec:
       maxUnavailable: 10
   template:
     metadata:
+      annotations:
+        {{- with .Values.exporter.spec.podAnnotations }}
+          {{- . | toYaml | nindent 8 }}
+        {{- end }}      
       labels:
         app.kubernetes.io/name: gke-hubble-export
+        {{- with .Values.exporter.spec.podLabels }}
+          {{- . | toYaml | nindent 8 }}
+        {{- end }}
         {{- include "hubble-gke-exporter.labels" . | nindent 8 }}
     spec:
       hostNetwork: {{ .Values.exporter.spec.hostNetwork }}

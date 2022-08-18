@@ -14,8 +14,15 @@ spec:
       {{- include "hubble-gke-exporter.labels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        {{- with .Values.relay.spec.podAnnotations }}
+          {{- . | toYaml | nindent 8 }}
+        {{- end }}   
       labels:
         app.kubernetes.io/name: hubble-relay
+        {{- with .Values.relay.spec.podLabels }}
+          {{- . | toYaml | nindent 8 }}
+        {{- end }}
         {{- include "hubble-gke-exporter.labels" . | nindent 8 }}
     spec:
       containers:
