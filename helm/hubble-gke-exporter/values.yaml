@@ -15,6 +15,7 @@ exporter:
         operator: Exists
     podLabels: {}
     podAnnotations: {}
+    securityContext: {}
 
 ui:
   frontend:
@@ -22,16 +23,22 @@ ui:
       repository: quay.io/cilium/hubble-ui
       tag: v0.8.4
       imagePullPolicy: IfNotPresent
+    spec:
+      securityContext: {}
   backend:
     image:
       repository: quay.io/cilium/hubble-ui-backend
       tag: v0.8.4
       imagePullPolicy: IfNotPresent
+    spec:
+      securityContext: {}
   proxy:
     image:
       repository: docker.io/envoyproxy/envoy
       tag: v1.18.4
       imagePullPolicy: IfNotPresent
+    spec:
+      securityContext: {}
   spec:    
     replicas: 1
     podLabels: {}
@@ -45,6 +52,7 @@ relay:
     replicas: 1
     podLabels: {}
     podAnnotations: {}
+    securityContext: {}
 
 service:
   relay:

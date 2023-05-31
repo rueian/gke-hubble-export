@@ -48,6 +48,10 @@ spec:
             - name: config
               mountPath: /etc/hubble-relay
               readOnly: true
+          securityContext:
+            {{- with .Values.relay.spec.securityContext }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
       restartPolicy: Always
       serviceAccount: {{ include "hubble-gke-exporter.fullname" . }}-relay
       serviceAccountName: {{ include "hubble-gke-exporter.fullname" . }}-relay
