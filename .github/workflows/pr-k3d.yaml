@@ -9,22 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: 'Run K3D'
-        uses: AbsaOSS/k3d-action@v2
       - name: 'Checkout'
         uses: actions/checkout@v3
+      - name: 'Get Helm'
+        uses: azure/setup-helm@v3
+      - name: 'Run K3D'
+        uses: AbsaOSS/k3d-action@v2
       - name: 'Install chart'
-        uses: deliverybot/helm@v1
-        with:
-          release: 'hubble-gke-exporter'
-          namespace: 'default'
-          chart: 'helm/hubble-gke-exporter'
-          token: '${{ github.token }}'
-          helm: 'helm3'
-      - name: 'Verify installation'
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-        with:
-          args: |
-            wait --for=condition=Ready -l pods --all -n default
+        shell: bash
+        run: |
+          helm install hubble helm/hubble-gke-exporter --wait --create-namespace -n hubble
+          kubectl get all -n hubble
