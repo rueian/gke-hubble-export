@@ -1,6 +1,6 @@
 name: Run K3D on PR
 on:
-  pull_requests:
+  pull_request:
     branches:
       - 'master'
 
