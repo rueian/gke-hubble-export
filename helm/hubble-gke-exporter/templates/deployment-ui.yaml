@@ -34,6 +34,10 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+          securityContext:
+            {{- with .Values.ui.frontend.spec.securityContext }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
         - name: backend
           image: "{{ .Values.ui.backend.image.repository }}:{{ .Values.ui.backend.image.tag }}"
           imagePullPolicy: {{ .Values.ui.backend.image.imagePullPolicy }}
@@ -45,6 +49,10 @@ spec:
           ports:
             - name: grpc
               containerPort: 8090
+          securityContext:
+            {{- with .Values.ui.backend.spec.securityContext }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
         - name: proxy
           image: "{{ .Values.ui.proxy.image.repository }}:{{ .Values.ui.proxy.image.tag }}"
           imagePullPolicy: {{ .Values.ui.proxy.image.imagePullPolicy }}
@@ -62,6 +70,10 @@ spec:
             - name: hubble-ui-envoy-yaml
               mountPath: /etc/envoy.yaml
               subPath: envoy.yaml
+          securityContext:
+            {{- with .Values.ui.proxy.spec.securityContext }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
       volumes:
         - name: hubble-ui-envoy-yaml
           configMap:

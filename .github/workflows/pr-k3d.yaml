@@ -1,0 +1,24 @@
+name: Run K3D on PR
+on:
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  k3d-install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'Get Helm'
+        uses: azure/setup-helm@v3
+      - name: 'Run K3D'
+        uses: AbsaOSS/k3d-action@v2
+        with:
+          cluster-name: k3d-test
+      - name: 'Install chart'
+        shell: bash
+        run: |
+          helm install hubble helm/hubble-gke-exporter --wait --create-namespace -n hubble
+          kubectl get all -n hubble
