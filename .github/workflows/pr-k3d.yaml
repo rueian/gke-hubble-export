@@ -15,6 +15,8 @@ jobs:
         uses: azure/setup-helm@v3
       - name: 'Run K3D'
         uses: AbsaOSS/k3d-action@v2
+        with:
+          cluster-name: k3d-test
       - name: 'Install chart'
         shell: bash
         run: |
