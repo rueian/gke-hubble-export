@@ -33,6 +33,10 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.exporter.spec.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: gke-hubble-export
           image: "{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"

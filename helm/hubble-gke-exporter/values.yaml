@@ -15,6 +15,7 @@ exporter:
         operator: Exists
     podLabels: {}
     podAnnotations: {}
+    podSecurityContext: {}
     securityContext: {}
 
 ui:
@@ -43,6 +44,7 @@ ui:
     replicas: 1
     podLabels: {}
     podAnnotations: {}
+    podSecurityContext: {}
 
 relay:
   image:
@@ -52,6 +54,7 @@ relay:
     replicas: 1
     podLabels: {}
     podAnnotations: {}
+    podSecurityContext: {}
     securityContext: {}
 
 service:
